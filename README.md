@@ -97,3 +97,4 @@ DailyNews is a modern, responsive full-stack Django web application that curates
 - Intelligent recommendation engine based on user reading habits.
 - Dedicated user dashboard for managing saved "Favorite" articles.
 - Migration of the `fetch_news` script to a periodic Celery background task.
+# daily-news
