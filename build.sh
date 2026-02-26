@@ -9,3 +9,7 @@ python manage.py collectstatic --no-input
 
 # Apply any outstanding database migrations
 python manage.py migrate
+
+# Fetch initial news if database is empty/needs update
+echo "Running background fetcher..."
+python manage.py fetch_news
