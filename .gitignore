@@ -1,0 +1,43 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Node/NPM (just in case)
+node_modules/
+package-lock.json
+
+# Build and Distribution
+dist/
+build/
+*.egg-info/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Gemini/Logs
+gemini_out.txt

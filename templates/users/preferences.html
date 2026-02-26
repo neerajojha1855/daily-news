@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card auth-card" style="max-width: 600px; text-align: left;">
+    <h2 style="text-align: center;">Your Preferences</h2>
+    <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Select topics you are interested in to
+        personalize your news feed.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <h4 style="margin-bottom: 10px;">Select Categories</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                {% for checkbox in form.categories %}
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    {{ checkbox.tag }} <span style="font-size: 1.1em;">{{ checkbox.choice_label }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <button type="submit" class="btn" style="padding: 12px 30px;">Save Preferences</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

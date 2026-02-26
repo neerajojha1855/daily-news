@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DailyNews</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- FontAwesome for footer icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <nav>
+        <div>
+            <a href="{% url 'home' %}" style="font-size:1.5rem">DailyNews</a>
+            <a href="{% url 'home' %}">Home</a>
+        </div>
+        <div class="nav-links">
+            {% if user.is_authenticated %}
+            <span style="color:var(--text-muted); margin-right:15px;">Welcome, {{ user.username }}</span>
+            <a href="{% url 'preferences' %}">Preferences</a>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit"
+                    style="background:none; border:none; color:var(--primary-cyan); font-size:1rem; cursor:pointer;"
+                    onmouseover="this.style.color='var(--accent-blue)'"
+                    onmouseout="this.style.color='var(--primary-cyan)'">Logout</button>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}" class="btn" style="color:#fff !important; text-shadow:none;">Sign Up</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    {% include 'footer.html' %}
+</body>
+
+</html>
