@@ -13,7 +13,7 @@ DailyNews is a modern, responsive full-stack Django web application that curates
 
 ## 🛠️ Technology Stack
 
-- **Backend:** Python, Django 6.0
+- **Backend:** Python, Django 5.1.1
 - **Database:** PostgreSQL (Configured) / SQLite (Development)
 - **Frontend:** Vanilla HTML, CSS, JavaScript (Django Templates)
 - **APIs:** NewsAPI (News Aggregation), Google Gemini API (AI Summarization)
