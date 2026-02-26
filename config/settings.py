@@ -30,7 +30,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key-if-not-in
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*'] if os.environ.get('DYNO') else []
+ALLOWED_HOSTS = []
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -145,8 +149,10 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-# Configure Django App for Heroku.
-if 'DYNO' in os.environ:
+# Configure Django App for Production (Render, etc.)
+if 'DATABASE_URL' in os.environ:
     import dj_database_url
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=600, 
+        conn_health_checks=True,
+    )
