@@ -27,8 +27,9 @@ class NewsFetcherService:
             response.raise_for_status()
             return response.json().get('articles', [])
         except Exception as e:
-            print(f"Error fetching news: {e}")
-            return []
+            print(f"Error fetching news (likely NewsAPI free tier blocking cloud servers): {e}")
+            print("Falling back to mock data so the app isn't empty.")
+            return self._get_mock_data(category_name)
             
     def _get_mock_data(self, category_name):
         return [
