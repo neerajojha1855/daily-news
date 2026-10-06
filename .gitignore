@@ -11,7 +11,7 @@ staticfiles/
 
 # Environments
 .env
-.venv
+.venv/
 env/
 venv/
 ENV/
@@ -40,3 +40,12 @@ celerybeat.pid
 
 # Gemini/Logs
 gemini_out.txt
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+
+# Local Environment Overrides
+.env*.local
