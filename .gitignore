@@ -11,7 +11,7 @@ staticfiles/
 
 # Environments
 .env
-.venv
+.venv/
 env/
 venv/
 ENV/
@@ -28,7 +28,6 @@ venv.bak/
 
 # Node/NPM (just in case)
 node_modules/
-package-lock.json
 
 # Build and Distribution
 dist/
@@ -41,3 +40,12 @@ celerybeat.pid
 
 # Gemini/Logs
 gemini_out.txt
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+
+# Local Environment Overrides
+.env*.local
