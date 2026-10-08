@@ -2,7 +2,7 @@
 NewsAPI.org provider implementation.
 """
 import httpx
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Literal
 from urllib.parse import urlencode
 
