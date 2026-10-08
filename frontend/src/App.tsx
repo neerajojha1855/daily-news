@@ -1,122 +1,187 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import { ThemeProvider, useTheme } from "./context/ThemeContext";
+import { ToastProvider, useToast } from "./context/ToastContext";
+import { Button } from "./components/ui/Button";
+import { Input } from "./components/ui/Input";
+import { Badge } from "./components/ui/Badge";
+import { ArticleCardSkeleton, DailyBriefingSkeleton } from "./components/ui/SkeletonLoader";
+import { Modal } from "./components/ui/Modal";
+import { ToastContainer } from "./components/ui/Toast";
 
-function App() {
-  const [count, setCount] = useState(0)
+const DesignSystemGallery: React.FC = () => {
+  const { theme, setTheme, effectiveTheme } = useTheme();
+  const { showToast } = useToast();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
+    <div className="min-h-screen bg-background text-foreground transition-colors p-6 sm:p-12 max-w-6xl mx-auto space-y-12">
+      <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-border gap-4">
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
+          <span className="text-xs uppercase tracking-widest font-semibold text-accent">Phase 5 Design System</span>
+          <h1 className="text-3xl sm:text-4xl font-bold font-serif text-foreground mt-1">Daily News UI Foundation</h1>
+          <p className="text-foreground-muted text-sm mt-1">Editorial aesthetics, zero-flash theming, and atomic components.</p>
+        </div>
+
+        <div className="flex items-center gap-2 bg-surface-elevated p-1.5 rounded-xl border border-border">
+          <Button
+            size="sm"
+            variant={theme === "light" ? "primary" : "ghost"}
+            onClick={() => setTheme("light")}
+          >
+            ☀️ Light
+          </Button>
+          <Button
+            size="sm"
+            variant={theme === "dark" ? "primary" : "ghost"}
+            onClick={() => setTheme("dark")}
+          >
+            🌙 Dark
+          </Button>
+          <Button
+            size="sm"
+            variant={theme === "system" ? "primary" : "ghost"}
+            onClick={() => setTheme("system")}
+          >
+            💻 System ({effectiveTheme})
+          </Button>
+        </div>
+      </header>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold font-serif border-b border-border pb-2">Editorial Typography</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-surface p-6 rounded-2xl border border-border">
+          <div>
+            <span className="text-xs font-semibold text-foreground-muted uppercase tracking-wider">Serif Headline (Merriweather)</span>
+            <h3 className="text-2xl font-serif font-bold text-foreground mt-2 leading-tight">
+              Global Markets Shift as AI Ingestion Pipelines Redefine Modern Newsrooms
+            </h3>
+          </div>
+          <div>
+            <span className="text-xs font-semibold text-foreground-muted uppercase tracking-wider">Sans Body (Inter)</span>
+            <p className="text-foreground-muted text-sm mt-2 leading-relaxed">
+              Every story processed by our platform undergoes structured synthesis by Google Gemini, extracting concise takeaways, importance rankings, and multi-point sentiment.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold font-serif border-b border-border pb-2">Button Primitives</h2>
+        <div className="flex flex-wrap items-center gap-4 bg-surface p-6 rounded-2xl border border-border">
+          <Button variant="primary">Primary Button</Button>
+          <Button variant="secondary">Secondary Button</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="ghost">Ghost</Button>
+          <Button variant="danger">Danger</Button>
+          <Button
+            variant="primary"
+            isLoading={buttonLoading}
+            onClick={() => {
+              setButtonLoading(true);
+              setTimeout(() => setButtonLoading(false), 2000);
+            }}
+          >
+            {buttonLoading ? "Loading..." : "Test Spinner"}
+          </Button>
+          <Button variant="primary" disabled>Disabled</Button>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold font-serif border-b border-border pb-2">Form Controls</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 bg-surface p-6 rounded-2xl border border-border">
+          <Input label="Email Address" placeholder="editor@dailynews.com" helperText="We will never share your email." />
+          <Input label="Password" placeholder="••••••••" isPassword helperText="Must be 8+ characters." />
+          <Input label="Search Query" placeholder="AI, Semiconductors, Climate..." error="Please enter a valid search term" />
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold font-serif border-b border-border pb-2">Semantic Badges</h2>
+        <div className="flex flex-wrap items-center gap-3 bg-surface p-6 rounded-2xl border border-border">
+          <Badge variant="category">Technology</Badge>
+          <Badge variant="category">Finance</Badge>
+          <Badge variant="category">World</Badge>
+          <Badge variant="sentiment" sentiment="positive">Positive (+0.84)</Badge>
+          <Badge variant="sentiment" sentiment="negative">Negative (-0.61)</Badge>
+          <Badge variant="sentiment" sentiment="neutral">Neutral (0.02)</Badge>
+          <Badge variant="importance" importance="high">High Importance</Badge>
+          <Badge variant="importance" importance="medium">Standard Priority</Badge>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold font-serif border-b border-border pb-2">Loading Skeletons</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <DailyBriefingSkeleton />
+          <ArticleCardSkeleton />
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold font-serif border-b border-border pb-2">Feedback & Dialogs</h2>
+        <div className="flex flex-wrap items-center gap-4 bg-surface p-6 rounded-2xl border border-border">
+          <Button variant="secondary" onClick={() => setModalOpen(true)}>
+            Open Article Preview Modal
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => showToast("Article saved to bookmarks!", "success")}
+          >
+            Trigger Success Toast
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => showToast("Failed to refresh feed. Rate limit reached.", "error")}
+          >
+            Trigger Error Toast
+          </Button>
+        </div>
+      </section>
+
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="AI Article Analysis Preview"
+      >
+        <div className="space-y-4 text-left">
+          <div className="flex items-center gap-2">
+            <Badge variant="category">Technology</Badge>
+            <Badge variant="sentiment" sentiment="positive">Positive</Badge>
+          </div>
+          <p className="text-sm text-foreground-muted leading-relaxed">
+            This modal illustrates the zero-layout-shift accessible dialog primitive. It supports keyboard ESC dismissal, backdrop blur, and scroll lock.
           </p>
+          <div className="flex justify-end gap-3 pt-4 border-t border-border">
+            <Button variant="outline" size="sm" onClick={() => setModalOpen(false)}>
+              Close
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => {
+                setModalOpen(false);
+                showToast("Action confirmed in modal", "info");
+              }}
+            >
+              Confirm
+            </Button>
+          </div>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </Modal>
 
-      <div className="ticks"></div>
+      <ToastContainer />
+    </div>
+  );
+};
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+export default function App() {
+  return (
+    <ThemeProvider>
+      <ToastProvider>
+        <DesignSystemGallery />
+      </ToastProvider>
+    </ThemeProvider>
+  );
 }
-
-export default App
