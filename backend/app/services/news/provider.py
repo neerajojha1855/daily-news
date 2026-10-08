@@ -297,12 +297,136 @@ class GNewsProvider(BaseNewsProvider):
         return await self._fetch("search", params)
 
 
+class NewsDataIOProvider(BaseNewsProvider):
+    """NewsData.io provider (newsdata.io)."""
+
+    name = "newsdata"
+    
+    supported_categories = [
+        "top", "business", "entertainment", "health", 
+        "science", "sports", "technology", "world", "politics", "environment"
+    ]
+
+    CATEGORY_MAP = {
+        "technology": "technology",
+        "business": "business",
+        "politics": "politics",
+        "science": "science",
+        "health": "health",
+        "sports": "sports",
+        "entertainment": "entertainment",
+        "world": "world",
+        "india": "top",
+        "education": "top",
+        "environment": "environment",
+    }
+
+    def __init__(self, api_key: str, base_url: str = "https://newsdata.io/api/1"):
+        super().__init__(api_key, base_url)
+        self.client = httpx.AsyncClient(timeout=30.0)
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self.client.aclose()
+
+    async def close(self):
+        await self.client.aclose()
+
+    def _normalize_article(self, raw: dict) -> RawNewsArticle:
+        # Newsdata.io pubDate format: "2023-01-20 15:30:00"
+        pub_date_str = raw.get("pubDate")
+        published_at = None
+        if pub_date_str:
+            try:
+                published_at = datetime.strptime(pub_date_str, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+            except ValueError:
+                published_at = self._parse_datetime(pub_date_str)
+        
+        source_name = "Unknown"
+        source_id = raw.get("source_id")
+        if isinstance(source_id, str):
+            source_name = source_id.capitalize()
+
+        return RawNewsArticle(
+            external_id=raw.get("article_id") or raw.get("link"),
+            title=raw.get("title", "").strip(),
+            description=raw.get("description"),
+            content=raw.get("content") or raw.get("description"),
+            url=raw.get("link", ""),
+            image_url=raw.get("image_url"),
+            source_name=source_name,
+            source_url=raw.get("source_url"),
+            author=(raw.get("creator") or [None])[0] if isinstance(raw.get("creator"), list) else raw.get("creator"),
+            published_at=published_at,
+            category=raw.get("category", [None])[0] if isinstance(raw.get("category"), list) else None,
+            language=raw.get("language", "en"),
+        )
+
+    async def _fetch(self, endpoint: str, params: dict) -> list[RawNewsArticle]:
+        url = f"{self.base_url}/{endpoint}"
+        params["apikey"] = self.api_key
+        try:
+            response = await self.client.get(url, params=params)
+            response.raise_for_status()
+            data = response.json()
+            
+            if data.get("status") == "error":
+                raise Exception(f"NewsData error: {data.get('results', {}).get('message', 'Unknown')}")
+                
+            articles = data.get("results", [])
+            return [self._normalize_article(a) for a in articles if a.get("title")]
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 401:
+                raise Exception("Invalid NewsData API key")
+            elif e.response.status_code == 429:
+                raise Exception("NewsData rate limit exceeded")
+            raise Exception(f"NewsData HTTP error: {e.response.status_code}")
+        except httpx.RequestError as e:
+            raise Exception(f"NewsData request failed: {str(e)}")
+
+    async def fetch_articles(
+        self,
+        category: str | None = None,
+        query: str | None = None,
+        language: str = "en",
+        page: int = 1,
+        page_size: int = 20,
+    ) -> list[RawNewsArticle]:
+        params = {"language": language}
+        if query:
+            params["q"] = query
+        if category and category in self.CATEGORY_MAP:
+            params["category"] = self.CATEGORY_MAP[category]
+        return await self._fetch("news", params)
+
+    async def fetch_top_headlines(
+        self,
+        category: str | None = None,
+        language: str = "en",
+        page: int = 1,
+        page_size: int = 20,
+    ) -> list[RawNewsArticle]:
+        return await self.fetch_articles(category, None, language, page, page_size)
+
+    async def search_articles(
+        self,
+        query: str,
+        language: str = "en",
+        page: int = 1,
+        page_size: int = 20,
+    ) -> list[RawNewsArticle]:
+        return await self.fetch_articles(None, query, language, page, page_size)
+
+
 # Provider factory
 def get_news_provider(provider_name: str, api_key: str, base_url: str) -> BaseNewsProvider:
     """Get news provider instance by name."""
     providers = {
         "newsapi": NewsAPIProvider,
         "gnews": GNewsProvider,
+        "newsdata": NewsDataIOProvider,
     }
     
     provider_class = providers.get(provider_name.lower())

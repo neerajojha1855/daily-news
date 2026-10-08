@@ -54,7 +54,12 @@ class Settings(BaseSettings):
     # News API
     NEWS_API_KEY: str = ""
     NEWS_API_BASE_URL: str = "https://newsapi.org/v2"
-    NEWS_API_PROVIDER: Literal["newsapi", "gnews"] = "newsapi"
+
+    # NewsData API (newsdata.io)
+    NEWS_DATA_API_KEY: str = ""
+    NEWS_DATA_BASE_URL: str = "https://newsdata.io/api/1"
+
+    NEWS_API_PROVIDER: Literal["newsapi", "gnews", "newsdata"] = "newsapi"
 
     # Google Gemini AI
     GEMINI_API_KEY: str = ""

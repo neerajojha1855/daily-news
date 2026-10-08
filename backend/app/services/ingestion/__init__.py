@@ -25,10 +25,13 @@ class IngestionService:
         self.article_repo = NewsArticleRepository(session)
         self.log_repo = RefreshLogRepository(session)
         self.gemini = get_gemini_service()
+        api_key = settings.NEWS_DATA_API_KEY if settings.NEWS_API_PROVIDER == "newsdata" else settings.NEWS_API_KEY
+        base_url = settings.NEWS_DATA_BASE_URL if settings.NEWS_API_PROVIDER == "newsdata" else settings.NEWS_API_BASE_URL
+        
         self.news_provider = get_news_provider(
             settings.NEWS_API_PROVIDER,
-            settings.NEWS_API_KEY,
-            settings.NEWS_API_BASE_URL,
+            api_key,
+            base_url,
         )
 
     def _canonicalize_url(self, url: str) -> str:
