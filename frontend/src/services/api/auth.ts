@@ -9,19 +9,24 @@ export const authApi = {
     });
   },
 
-  register: (email: string, password: string, fullName?: string) => {
+  register: (username: string, email: string, password: string, confirmPassword: string) => {
     return apiClient<AuthResponse>("/auth/register", {
       method: "POST",
-      body: JSON.stringify({ email, password, full_name: fullName }),
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+        confirm_password: confirmPassword,
+      }),
     });
   },
 
   getMe: () => {
-    return apiClient<User>("/profile/me");
+    return apiClient<User>("/auth/me");
   },
 
-  updatePreferences: (preferences: Partial<UserPreferences>) => {
-    return apiClient<User>("/preferences", {
+  updatePreferences: (preferences: UserPreferences) => {
+    return apiClient<UserPreferences>("/preferences", {
       method: "PUT",
       body: JSON.stringify(preferences),
     });

@@ -18,17 +18,17 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    "inline-flex items-center justify-center font-medium rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none";
+    "inline-flex items-center justify-center font-bold rounded-md transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none";
 
   const variants = {
     primary:
-      "bg-accent hover:bg-accent-hover text-white focus:ring-indigo-500 shadow-sm active:scale-[0.98]",
+      "bg-accent hover:bg-accent-hover text-white focus:ring-accent shadow-[4px_4px_0_#171717] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none",
     secondary:
-      "bg-surface-elevated hover:bg-border text-foreground border border-border focus:ring-slate-400 active:scale-[0.98]",
+      "bg-surface-elevated hover:bg-yellow-200 text-foreground border-2 border-border focus:ring-accent active:translate-x-0.5 active:translate-y-0.5",
     outline:
-      "bg-transparent border border-border hover:bg-surface-elevated text-foreground focus:ring-indigo-500 active:scale-[0.98]",
+      "bg-transparent border-2 border-border hover:bg-yellow-200 dark:hover:bg-surface-elevated text-foreground focus:ring-accent active:translate-x-0.5 active:translate-y-0.5",
     ghost:
-      "bg-transparent hover:bg-surface-elevated text-foreground focus:ring-slate-400",
+      "bg-transparent hover:bg-yellow-200/70 dark:hover:bg-surface-elevated text-foreground focus:ring-accent",
     danger:
       "bg-red-600 hover:bg-red-700 text-white focus:ring-red-500 shadow-sm active:scale-[0.98]",
   };

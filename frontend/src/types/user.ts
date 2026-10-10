@@ -1,26 +1,36 @@
 import type { NewsCategory } from "./news";
 
 export interface UserPreferences {
-  categories: NewsCategory[];
-  daily_digest_enabled: boolean;
-  theme?: "light" | "dark" | "system";
+  preferred_categories: NewsCategory[];
+  preferred_sources: string[];
+  preferred_language: string;
 }
 
 export interface User {
-  id: number;
+  id: string;
   email: string;
-  full_name?: string | null;
+  username: string;
   is_active: boolean;
-  preferences: UserPreferences;
   created_at: string;
+  last_login_at?: string | null;
+}
+
+export interface UserProfile extends User {
+  stats: {
+    total_bookmarks: number;
+  };
 }
 
 export interface AuthTokens {
   access_token: string;
+  refresh_token: string;
   token_type: string;
+  expires_in: number;
 }
 
 export interface AuthResponse {
-  user: User;
-  token: AuthTokens;
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
 }

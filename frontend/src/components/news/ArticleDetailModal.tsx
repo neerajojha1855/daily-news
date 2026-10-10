@@ -78,7 +78,7 @@ export const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
           </div>
 
           {/* AI Summary Box */}
-          <div className="bg-surface-elevated rounded-xl p-6 border border-accent/20 shadow-sm relative">
+          <div className="relative border-2 border-border bg-yellow-100 p-6 shadow-[5px_5px_0_#171717] dark:bg-yellow-300">
             <div className="absolute top-0 left-0 w-1.5 h-full bg-accent rounded-l-xl" />
             <div className="flex items-center gap-2 mb-4 text-accent font-bold uppercase tracking-widest text-xs">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">

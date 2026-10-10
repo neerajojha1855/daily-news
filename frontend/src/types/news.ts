@@ -5,15 +5,18 @@ export type NewsCategory =
   | "health"
   | "science"
   | "world"
-  | "general"
   | "sports"
-  | "entertainment";
+  | "entertainment"
+  | "india"
+  | "education"
+  | "environment"
+  | "other";
 
-export type SentimentType = "positive" | "negative" | "neutral";
+export type SentimentType = "positive" | "negative" | "neutral" | "mixed";
 export type ImportanceType = "high" | "medium" | "low";
 
 export interface NewsArticle {
-  id: number;
+  id: string;
   title: string;
   source: string;
   url: string;
@@ -24,25 +27,24 @@ export interface NewsArticle {
   sentiment: SentimentType;
   sentiment_score?: number | null;
   importance: ImportanceType;
-  published_at?: string | null;
+  published_at: string;
   created_at: string;
   is_bookmarked?: boolean;
 }
 
 export interface NewsFeedParams {
   category?: NewsCategory;
-  sentiment?: SentimentType;
-  search?: string;
+  sort?: "latest" | "importance" | "trending" | "recommended";
   page?: number;
-  limit?: number;
+  pageSize?: number;
 }
 
 export interface NewsFeedResponse {
   items: NewsArticle[];
   total: number;
   page: number;
-  limit: number;
-  has_more: boolean;
+  page_size: number;
+  total_pages: number;
 }
 
 export interface DailyBriefing {

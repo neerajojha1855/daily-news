@@ -77,7 +77,7 @@ async def get_trending_news(
     db: AsyncSession = Depends(get_db),
 ) -> list[ArticleListResponse]:
     article_repo = NewsArticleRepository(db)
-    articles = await article_repo.get_trending(category=category, limit=limit, hours=24)
+    articles = await article_repo.get_trending(category=category, limit=limit, hours=48)
     return [ArticleListResponse.model_validate(a) for a in articles]
 
 

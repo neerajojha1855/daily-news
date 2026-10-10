@@ -1,18 +1,29 @@
 {
-    "rewrites": [
-        {
-            "source": "/api/(.*)",
-            "destination": "/api/index.py"
-        },
-        {
-            "source": "/(.*)",
-            "destination": "/frontend/dist/$1"
-        }
-    ],
-    "crons": [
-        {
-            "path": "/api/v1/internal/refresh-news",
-            "schedule": "*/15 * * * *"
-        }
-    ]
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/vite"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/v1/internal/refresh-news",
+      "schedule": "*/15 * * * *"
+    }
+  ]
 }

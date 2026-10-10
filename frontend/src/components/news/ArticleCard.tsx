@@ -5,7 +5,7 @@ import { formatDate, truncateText } from "../../lib/utils";
 
 interface ArticleCardProps {
   article: NewsArticle;
-  onBookmarkToggle?: (id: number, isBookmarked: boolean) => void;
+  onBookmarkToggle?: (id: string, isBookmarked: boolean) => void | Promise<boolean>;
   onClick?: (article: NewsArticle) => void;
   featured?: boolean;
 }
@@ -19,20 +19,23 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   const [imgError, setImgError] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(article.is_bookmarked || false);
 
-  const handleBookmark = (e: React.MouseEvent) => {
+  const handleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation();
     const newState = !isBookmarked;
+    if (onBookmarkToggle) {
+      const result = await onBookmarkToggle(article.id, newState);
+      if (result === false) return;
+    }
     setIsBookmarked(newState);
-    if (onBookmarkToggle) onBookmarkToggle(article.id, newState);
   };
 
   return (
     <article
       onClick={() => onClick && onClick(article)}
-      className="group flex flex-col bg-surface border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all cursor-pointer h-full"
+      className={`group flex h-full cursor-pointer flex-col overflow-hidden border-2 border-border bg-surface transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0_#ef5b3f] ${featured ? "md:col-span-2 md:grid md:grid-cols-[1.15fr_0.85fr]" : ""}`}
     >
       {/* Image Container */}
-      <div className={`relative w-full overflow-hidden bg-slate-100 dark:bg-slate-800 ${featured ? 'h-64' : 'h-48'}`}>
+      <div className={`relative w-full overflow-hidden border-b-2 border-border bg-surface-elevated ${featured ? "h-72 md:h-full md:min-h-[26rem] md:border-b-0 md:border-r-2" : "h-48"}`}>
         {!imgError && article.image_url ? (
           <img
             src={article.image_url}
@@ -48,30 +51,30 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             </svg>
           </div>
         )}
-        <div className="absolute top-3 left-3 flex gap-2">
+        <div className="absolute left-3 top-3 flex gap-2">
           <Badge variant="category">{article.category}</Badge>
           {article.importance === "high" && <Badge variant="importance" importance="high">Hot</Badge>}
         </div>
         <button
           onClick={handleBookmark}
-          className="absolute top-3 right-3 p-2 rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-md text-white transition-colors"
+          className="absolute right-3 top-3 border-2 border-white bg-black/70 p-2 text-white transition-colors hover:bg-accent"
           aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
         >
           <svg className={`w-5 h-5 ${isBookmarked ? 'fill-current text-red-500' : 'stroke-current fill-none'}`} viewBox="0 0 24 24" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 4.5A2.5 2.5 0 018.5 2h7A2.5 2.5 0 0118 4.5v17l-6-3.75L6 21.5v-17z" />
           </svg>
         </button>
       </div>
 
       {/* Content Container */}
-      <div className="p-5 flex flex-col flex-grow">
+      <div className="flex flex-grow flex-col p-5 sm:p-6">
         <div className="flex items-center gap-2 mb-2 text-xs font-medium text-foreground-muted">
           <span>{article.source}</span>
           <span>•</span>
           <span>{formatDate(article.published_at || article.created_at)}</span>
         </div>
         
-        <h3 className={`font-serif font-bold text-foreground mb-3 leading-tight group-hover:text-accent transition-colors ${featured ? 'text-2xl' : 'text-lg'}`}>
+        <h3 className={`mb-3 font-serif font-bold leading-tight text-foreground transition-colors group-hover:text-accent ${featured ? "text-3xl sm:text-4xl" : "text-xl"}`}>
           {article.title}
         </h3>
         

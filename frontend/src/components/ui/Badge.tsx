@@ -20,20 +20,20 @@ export const Badge: React.FC<BadgeProps> = ({
   let styleClasses = "bg-surface-elevated text-foreground-muted border-border";
 
   if (variant === "category") {
-    styleClasses = "bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-800";
+    styleClasses = "bg-yellow-300 text-foreground border-border";
   } else if (variant === "sentiment") {
     if (sentiment === "positive") {
-      styleClasses = "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800";
+      styleClasses = "bg-[#b8efcf] text-foreground border-border";
     } else if (sentiment === "negative") {
-      styleClasses = "bg-red-50 text-red-700 border-red-200 dark:bg-red-950/40 dark:text-red-300 dark:border-red-800";
+      styleClasses = "bg-[#ffc3b5] text-foreground border-border";
     } else {
-      styleClasses = "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/40 dark:text-slate-300 dark:border-slate-700";
+      styleClasses = "bg-surface-elevated text-foreground border-border";
     }
   } else if (variant === "importance") {
     if (importance === "high") {
-      styleClasses = "bg-amber-50 text-amber-800 border-amber-300 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800 font-semibold";
+      styleClasses = "bg-accent text-white border-border font-semibold";
     } else {
-      styleClasses = "bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700";
+      styleClasses = "bg-surface-elevated text-foreground-muted border-border";
     }
   }
 

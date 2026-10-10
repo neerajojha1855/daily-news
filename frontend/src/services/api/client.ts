@@ -32,8 +32,14 @@ export async function apiClient<T>(
     let errorDetail = "An unexpected error occurred.";
     try {
       const errorJson = await response.json();
-      errorDetail = errorJson.detail || errorJson.message || errorDetail;
-    } catch {}
+      errorDetail =
+        errorJson.error?.message ||
+        errorJson.detail ||
+        errorJson.message ||
+        errorDetail;
+    } catch {
+      // Some error responses do not contain JSON.
+    }
 
     const err: ApiError = {
       status: response.status,
@@ -46,5 +52,14 @@ export async function apiClient<T>(
     return {} as T;
   }
 
-  return response.json();
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    throw {
+      status: response.status,
+      message:
+        "The API returned a non-JSON response. Start the FastAPI server on port 8000 or set VITE_API_BASE_URL to the deployed API URL.",
+    } satisfies ApiError;
+  }
+
+  return response.json() as Promise<T>;
 }

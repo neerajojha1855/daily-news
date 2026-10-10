@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Daily News logo</title>
+  <desc id="desc">A bold newspaper icon with a sun rising behind it.</desc>
+  <rect width="128" height="128" fill="#EF5B3F"/>
+  <path fill="#FFD84D" d="M88 18a25 25 0 1 0 22 36H66a22 22 0 0 1 22-36Z"/>
+  <path fill="#171717" d="M24 34h68a12 12 0 0 1 12 12v47H32a8 8 0 0 1-8-8V34Z"/>
+  <path fill="#FFFDF8" d="M34 45h42v7H34zM34 58h57v5H34zM34 69h35v5H34zM34 80h49v5H34z"/>
+  <path fill="#EF5B3F" d="M82 45h12v18H82z"/>
+  <path fill="#FFFDF8" d="M20 34h8v47a4 4 0 0 0 4 4h72v8H32c-6.627 0-12-5.373-12-12V34Z"/>
+  <path fill="#171717" d="M91 93h13v8H91z"/>
+</svg>
