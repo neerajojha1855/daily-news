@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 export type Theme = "light" | "dark" | "system";
@@ -19,7 +20,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (stored === "light" || stored === "dark" || stored === "system") {
         return stored;
       }
-    } catch {}
+    } catch {
+      return "system";
+    }
     return "system";
   });
 
@@ -37,14 +40,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = () => {
-      let resolvedDark = false;
-      if (theme === "dark") {
-        resolvedDark = true;
-      } else if (theme === "light") {
-        resolvedDark = false;
-      } else {
-        resolvedDark = mediaQuery.matches;
-      }
+      const resolvedDark = theme === "dark" || (theme === "system" && mediaQuery.matches);
 
       setEffectiveTheme(resolvedDark ? "dark" : "light");
 
@@ -71,7 +67,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setThemeState(newTheme);
     try {
       localStorage.setItem(THEME_STORAGE_KEY, newTheme);
-    } catch {}
+    } catch {
+      // Storage can be unavailable in privacy-restricted browsers.
+    }
   };
 
   return (

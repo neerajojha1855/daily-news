@@ -1,9 +1,14 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { ToastProvider } from "./context/ToastContext";
 import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
-import { HomePage } from "./pages/HomePage";
+import { ToastContainer } from "./components/ui/Toast";
+import { FeedPage } from "./pages/FeedPage";
+import { BookmarksPage } from "./pages/BookmarksPage";
+import { LoginPage } from "./pages/LoginPage";
+import { SignupPage } from "./pages/SignupPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 export default function App() {
   return (
@@ -14,14 +19,19 @@ export default function App() {
             <Navbar />
             <main className="flex-grow">
               <Routes>
-                <Route path="/" element={<HomePage />} />
-                {/* Future routes (Phase 8 API integration) */}
-                <Route path="/category/:slug" element={<HomePage />} />
-                <Route path="/for-you" element={<HomePage />} />
-                <Route path="/bookmarks" element={<HomePage />} />
+                <Route path="/" element={<FeedPage />} />
+                <Route path="/category/:slug" element={<FeedPage />} />
+                <Route path="/for-you" element={<FeedPage mode="recommended" />} />
+                <Route path="/bookmarks" element={<BookmarksPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+                <Route path="/register" element={<SignupPage />} />
+                <Route path="/home" element={<Navigate to="/" replace />} />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </main>
             <Footer />
+            <ToastContainer />
           </div>
         </Router>
       </ToastProvider>

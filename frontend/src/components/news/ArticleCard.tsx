@@ -5,7 +5,7 @@ import { formatDate, truncateText } from "../../lib/utils";
 
 interface ArticleCardProps {
   article: NewsArticle;
-  onBookmarkToggle?: (id: number, isBookmarked: boolean) => void;
+  onBookmarkToggle?: (id: string, isBookmarked: boolean) => void | Promise<boolean>;
   onClick?: (article: NewsArticle) => void;
   featured?: boolean;
 }
@@ -19,11 +19,14 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   const [imgError, setImgError] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(article.is_bookmarked || false);
 
-  const handleBookmark = (e: React.MouseEvent) => {
+  const handleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation();
     const newState = !isBookmarked;
+    if (onBookmarkToggle) {
+      const result = await onBookmarkToggle(article.id, newState);
+      if (result === false) return;
+    }
     setIsBookmarked(newState);
-    if (onBookmarkToggle) onBookmarkToggle(article.id, newState);
   };
 
   return (
@@ -58,7 +61,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
         >
           <svg className={`w-5 h-5 ${isBookmarked ? 'fill-current text-red-500' : 'stroke-current fill-none'}`} viewBox="0 0 24 24" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 4.5A2.5 2.5 0 018.5 2h7A2.5 2.5 0 0118 4.5v17l-6-3.75L6 21.5v-17z" />
           </svg>
         </button>
       </div>

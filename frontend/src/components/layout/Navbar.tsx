@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { Button } from "../ui/Button";
 
 export const Navbar: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleTheme = () => {
@@ -49,11 +50,26 @@ export const Navbar: React.FC = () => {
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full text-foreground-muted hover:text-foreground hover:bg-surface-elevated transition-colors"
-              aria-label="Toggle Dark Mode"
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             >
               {theme === "dark" ? "☀️" : "🌙"}
             </button>
-            <Button variant="primary" size="sm" className="hidden sm:inline-flex">Sign In</Button>
+            {localStorage.getItem("daily_news_token") ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hidden sm:inline-flex"
+                onClick={() => {
+                  localStorage.removeItem("daily_news_token");
+                  localStorage.removeItem("daily_news_refresh_token");
+                  navigate("/");
+                }}
+              >
+                Sign out
+              </Button>
+            ) : (
+              <Button variant="primary" size="sm" className="hidden sm:inline-flex" onClick={() => navigate("/login")}>Sign In</Button>
+            )}
             
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -85,7 +101,22 @@ export const Navbar: React.FC = () => {
               </Link>
             ))}
             <div className="pt-2 px-3">
-              <Button variant="primary" className="w-full">Sign In</Button>
+              {localStorage.getItem("daily_news_token") ? (
+                <Button
+                  variant="ghost"
+                  className="w-full"
+                  onClick={() => {
+                    localStorage.removeItem("daily_news_token");
+                    localStorage.removeItem("daily_news_refresh_token");
+                    setMobileMenuOpen(false);
+                    navigate("/");
+                  }}
+                >
+                  Sign out
+                </Button>
+              ) : (
+                <Button variant="primary" className="w-full" onClick={() => { setMobileMenuOpen(false); navigate("/login"); }}>Sign In</Button>
+              )}
             </div>
           </div>
         </div>
