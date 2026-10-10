@@ -25,8 +25,8 @@ export const authApi = {
     return apiClient<User>("/auth/me");
   },
 
-  updatePreferences: (preferences: Partial<UserPreferences>) => {
-    return apiClient<User>("/preferences", {
+  updatePreferences: (preferences: UserPreferences) => {
+    return apiClient<UserPreferences>("/preferences", {
       method: "PUT",
       body: JSON.stringify(preferences),
     });

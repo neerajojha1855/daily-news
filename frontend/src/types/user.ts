@@ -12,6 +12,13 @@ export interface User {
   username: string;
   is_active: boolean;
   created_at: string;
+  last_login_at?: string | null;
+}
+
+export interface UserProfile extends User {
+  stats: {
+    total_bookmarks: number;
+  };
 }
 
 export interface AuthTokens {
