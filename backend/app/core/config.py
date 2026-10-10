@@ -3,8 +3,8 @@ Application configuration using Pydantic Settings.
 All environment variables are defined here with validation.
 """
 from functools import lru_cache
-from typing import Annotated, Literal
-from urllib.parse import quote_plus
+from typing import Literal
+from urllib.parse import parse_qsl, quote_plus, urlencode, urlsplit, urlunsplit
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -35,10 +35,21 @@ class Settings(BaseSettings):
         if self.DATABASE_URL:
             url = str(self.DATABASE_URL)
             if url.startswith("postgresql://"):
-                return url.replace("postgresql://", "postgresql+asyncpg://", 1)
-            return url
+                url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+            return self._normalize_asyncpg_url(url)
         pwd = quote_plus(self.DB_PASSWORD)
         return f"postgresql+asyncpg://{self.DB_USER}:{pwd}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+
+    @staticmethod
+    def _normalize_asyncpg_url(url: str) -> str:
+        """Remove PostgreSQL URL options that asyncpg does not support."""
+        parsed = urlsplit(url)
+        query = [
+            (key, value)
+            for key, value in parse_qsl(parsed.query, keep_blank_values=True)
+            if key != "channel_binding"
+        ]
+        return urlunsplit(parsed._replace(query=urlencode(query)))
 
     @property
     def sync_database_url(self) -> str:
