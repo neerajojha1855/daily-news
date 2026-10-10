@@ -20,13 +20,13 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className="sticky top-0 z-40 w-full bg-surface/80 backdrop-blur-lg border-b border-border">
+    <nav className="sticky top-0 z-40 w-full border-b-2 border-border bg-surface">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
-              <span className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center text-white font-serif font-bold text-xl">D</span>
-              <span className="font-serif font-bold text-xl text-foreground hidden sm:block tracking-tight">Daily News</span>
+              <img src="/daily-news-logo.svg" alt="" className="h-10 w-10 border-2 border-border shadow-[3px_3px_0_#171717]" />
+              <span className="font-serif text-2xl font-bold tracking-tight text-foreground hidden sm:block">Daily News</span>
             </Link>
             
             <div className="hidden md:flex items-center space-x-1">
@@ -36,7 +36,7 @@ export const Navbar: React.FC = () => {
                   to={link.path}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     location.pathname === link.path
-                      ? "bg-surface-elevated text-accent"
+                      ? "bg-yellow-300 text-foreground"
                       : "text-foreground-muted hover:text-foreground hover:bg-surface-elevated"
                   }`}
                 >
@@ -49,24 +49,26 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full text-foreground-muted hover:text-foreground hover:bg-surface-elevated transition-colors"
+              className="border-2 border-border bg-yellow-300 p-2 text-foreground transition-transform hover:-translate-y-0.5"
               aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             >
               {theme === "dark" ? "☀️" : "🌙"}
             </button>
             {localStorage.getItem("daily_news_token") ? (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hidden sm:inline-flex"
-                onClick={() => {
-                  localStorage.removeItem("daily_news_token");
-                  localStorage.removeItem("daily_news_refresh_token");
-                  navigate("/");
-                }}
-              >
-                Sign out
-              </Button>
+              <div className="hidden items-center gap-1 sm:flex">
+                <Button variant="ghost" size="sm" onClick={() => navigate("/profile")}>Profile</Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    localStorage.removeItem("daily_news_token");
+                    localStorage.removeItem("daily_news_refresh_token");
+                    navigate("/");
+                  }}
+                >
+                  Sign out
+                </Button>
+              </div>
             ) : (
               <Button variant="primary" size="sm" className="hidden sm:inline-flex" onClick={() => navigate("/login")}>Sign In</Button>
             )}
@@ -102,18 +104,21 @@ export const Navbar: React.FC = () => {
             ))}
             <div className="pt-2 px-3">
               {localStorage.getItem("daily_news_token") ? (
-                <Button
-                  variant="ghost"
-                  className="w-full"
-                  onClick={() => {
-                    localStorage.removeItem("daily_news_token");
-                    localStorage.removeItem("daily_news_refresh_token");
-                    setMobileMenuOpen(false);
-                    navigate("/");
-                  }}
-                >
-                  Sign out
-                </Button>
+                <div className="space-y-1">
+                  <Button variant="secondary" className="w-full" onClick={() => { setMobileMenuOpen(false); navigate("/profile"); }}>Profile settings</Button>
+                  <Button
+                    variant="ghost"
+                    className="w-full"
+                    onClick={() => {
+                      localStorage.removeItem("daily_news_token");
+                      localStorage.removeItem("daily_news_refresh_token");
+                      setMobileMenuOpen(false);
+                      navigate("/");
+                    }}
+                  >
+                    Sign out
+                  </Button>
+                </div>
               ) : (
                 <Button variant="primary" className="w-full" onClick={() => { setMobileMenuOpen(false); navigate("/login"); }}>Sign In</Button>
               )}

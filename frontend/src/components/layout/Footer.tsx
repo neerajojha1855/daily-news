@@ -8,7 +8,7 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <span className="w-6 h-6 rounded bg-accent flex items-center justify-center text-white font-serif font-bold text-sm">D</span>
+              <img src="/daily-news-logo.svg" alt="" className="h-7 w-7 border-2 border-border" />
               <span className="font-serif font-bold text-lg text-foreground tracking-tight">Daily News</span>
             </Link>
             <p className="text-foreground-muted text-sm max-w-sm leading-relaxed">

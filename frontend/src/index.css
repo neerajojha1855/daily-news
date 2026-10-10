@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --font-serif: Merriweather, Georgia, serif;
+  --font-serif: Newsreader, Georgia, serif;
   --font-sans: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
 
-  --color-accent: #4f46e5;
-  --color-accent-hover: #4338ca;
+  --color-accent: #ef5b3f;
+  --color-accent-hover: #d9472d;
 
   --color-sentiment-positive: #065f46;
   --color-sentiment-negative: #991b1b;
@@ -14,21 +14,21 @@
 
 @layer base {
   :root {
-    --background: #fdfdfd;
-    --surface: #ffffff;
-    --surface-elevated: #f8fafc;
-    --border: #e2e8f0;
-    --foreground: #0f172a;
-    --foreground-muted: #64748b;
+    --background: #f4f0e7;
+    --surface: #fffdf8;
+    --surface-elevated: #ebe5d8;
+    --border: #171717;
+    --foreground: #171717;
+    --foreground-muted: #625d55;
   }
 
   .dark {
-    --background: #090d16;
-    --surface: #111827;
-    --surface-elevated: #1e293b;
-    --border: #334155;
-    --foreground: #f8fafc;
-    --foreground-muted: #94a3b8;
+    --background: #171717;
+    --surface: #232323;
+    --surface-elevated: #2d2d2d;
+    --border: #f4f0e7;
+    --foreground: #f4f0e7;
+    --foreground-muted: #c1b9ad;
   }
 }
 
@@ -37,6 +37,26 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+::selection {
+  background: #ffd84d;
+  color: #171717;
+}
+
+.brutal-panel {
+  border: 2px solid var(--border);
+  box-shadow: 6px 6px 0 var(--border);
+}
+
+.brutal-panel-sm {
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0 var(--border);
+}
+
+.clay-panel {
+  border: 1px solid color-mix(in srgb, var(--border) 14%, transparent);
+  box-shadow: 10px 10px 24px color-mix(in srgb, var(--border) 12%, transparent), -8px -8px 20px color-mix(in srgb, white 65%, transparent);
 }
 
 ::-webkit-scrollbar {

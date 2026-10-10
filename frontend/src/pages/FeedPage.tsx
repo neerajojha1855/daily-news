@@ -139,7 +139,7 @@ export function FeedPage({ mode = "latest" }: FeedPageProps) {
       </div>
 
       {error && (
-        <div className="mb-8 rounded-2xl border border-red-200 bg-red-50 p-6 text-red-900 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-100">
+        <div className="brutal-panel mb-8 bg-[#ffc3b5] p-6 text-foreground">
           <h2 className="font-semibold">The feed is temporarily unavailable</h2>
           <p className="mt-1 text-sm opacity-80">{error}</p>
           <Button className="mt-4" size="sm" onClick={() => window.location.reload()}>Try again</Button>
@@ -150,17 +150,17 @@ export function FeedPage({ mode = "latest" }: FeedPageProps) {
         <section className="min-w-0 flex-1" aria-labelledby="feed-heading">
           <h2 id="feed-heading" className="sr-only">{title}</h2>
           {isLoading || isPending ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
               {[1, 2, 3, 4].map((item) => <div key={item} className="h-96 animate-pulse rounded-2xl bg-surface-elevated" />)}
             </div>
           ) : articles.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-border bg-surface p-12 text-center">
+            <div className="brutal-panel border-dashed bg-surface p-12 text-center shadow-none">
               <h2 className="font-serif text-2xl font-bold text-foreground">No stories here yet</h2>
               <p className="mx-auto mt-2 max-w-md text-sm text-foreground-muted">Try another category or return to the top stories feed.</p>
               <Button className="mt-5" onClick={() => navigate("/")}>Browse top stories</Button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
               {articles.map((article, index) => (
                 <ArticleCard
                   key={article.id}

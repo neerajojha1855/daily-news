@@ -8,33 +8,33 @@ interface DailyBriefingHeroProps {
 
 export const DailyBriefingHero: React.FC<DailyBriefingHeroProps> = ({ briefing }) => {
   return (
-    <div className="bg-surface-elevated rounded-2xl p-6 sm:p-10 border border-border shadow-sm mb-10 relative overflow-hidden">
+    <div className="brutal-panel relative mb-10 overflow-hidden bg-surface p-6 sm:p-10">
       {/* Decorative background element */}
-      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-accent opacity-5 rounded-full blur-3xl pointer-events-none" />
+      <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rotate-12 border-2 border-border bg-yellow-300" />
       
       <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-border/50 pb-6 mb-6">
         <div>
-          <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-accent mb-2">
-            <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+          <span className="mb-2 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-accent">
+            <span className="h-3 w-3 border-2 border-border bg-accent" />
             Daily Briefing
           </span>
-          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-foreground">
+          <h2 className="font-serif text-4xl font-bold leading-none text-foreground sm:text-6xl">
             Today's world, at a glance.
           </h2>
         </div>
-        <div className="text-sm font-medium text-foreground-muted bg-surface px-3 py-1.5 rounded-lg border border-border/50">
+        <div className="brutal-panel-sm bg-yellow-300 px-3 py-1.5 text-sm font-bold text-foreground">
           {formatDate(briefing.date)}
         </div>
       </div>
 
       <div className="relative z-10 max-w-4xl">
-        <p className="text-lg sm:text-xl text-foreground-muted leading-relaxed font-serif">
+        <p className="max-w-3xl font-serif text-xl leading-relaxed text-foreground sm:text-2xl">
           {briefing.headline_summary}
         </p>
         
         {briefing.market_pulse && (
-          <div className="mt-6 p-4 bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/30 rounded-xl">
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 block mb-1">Market Pulse</span>
+          <div className="mt-6 border-2 border-border bg-[#b8efcf] p-4 text-foreground">
+            <span className="mb-1 block text-xs font-bold uppercase tracking-wider">Market Pulse</span>
             <p className="text-sm text-foreground-muted">{briefing.market_pulse}</p>
           </div>
         )}
