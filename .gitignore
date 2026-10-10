@@ -49,3 +49,4 @@ gemini_out.txt
 
 # Local Environment Overrides
 .env*.local
+.neon
